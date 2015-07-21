@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+
+<launch>
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find iai_rescue_operator_gazebo)/worlds/operator.world"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+    <arg name="extra_client_args" value="-g /home/bbrieber/Workspace/ros/sherpa/devel/lib/libiai_rescue_operator_vis_gazebo.so"/>
+  </include>
+  
+  <include file="$(find iai_rescue_operator_gazebo)/launch/spawn_operator.launch"/>
+</launch>

@@ -1,0 +1,150 @@
+#!/usr/bin/python
+
+import rospy
+from iai_rescue_simple_navigation.rover_navigation import *
+from iai_rescue_simple_navigation.simple_steering import *
+  
+  
+from iai_rescue_simulation_msgs.srv import *
+from iai_rescue_simulation_msgs.msg import *
+
+from geometry_msgs.msg import *
+from std_msgs.msg import *
+
+#if __name__ == '__main__':
+#  rospy.init_node('nav_b_client')
+#  RoverSimpleNavAction(rospy.get_name())  
+#  rospy.spin()
+  
+def attach_box_to_rmax():
+  print("attaching Box to RMax")
+  rospy.wait_for_service('/box/attach_box_request')
+  try:
+    attach = rospy.ServiceProxy('/box/attach_box_request', AttachBoxTo)
+    robot = DockableRobot('rmax','rmax','base_link','box_dock_link')
+    r = attach(robot, 2)
+  except rospy.ServiceException, e:
+    print "Service call failed: %s"%e
+      
+        
+def attach_quadrotors_to_box(wasps = ['wasp_1']):
+  print("attaching quadcopters")
+  rospy.wait_for_service('/box/general_dock_request')
+  
+  try:
+    attach = rospy.ServiceProxy('/box/general_dock_request', ConnectComponnet)
+    for wasp in wasps:
+      linkName = 'recharge_dock_link'#'base_link'
+      con1 =  RobotConnection('box',wasp,'quadrotor_dock_right_front_link', linkName)
+      r = attach(con1, 0)
+  except rospy.ServiceException, e:
+      print "Service call failed: %s"%e
+    
+    
+def move_rmax_to(loc = Point(-47., -22., 33.)):
+  flyTo = FlyTo(base_frame='rmax/base_link',namespace = '/rmax/')
+  q = Quaternion(0.0,0.,0.,1.)
+  
+  p = Pose(loc,q)
+  flyTo.setTargetPose(p)
+  flyTo.start_motion()
+    
+def adjust_rmax_height(height=1):
+  print("adjusting height")
+  lookAt = AdjustHeight(base_frame='rmax/base_link',height=height,namespace = '/rmax/')
+  lookAt.start_motion()
+  
+  
+def rmax_release_box():
+  print("releasing box")
+  rospy.wait_for_service('/box/attach_box_request')
+  try:
+    attach = rospy.ServiceProxy('/box/attach_box_request', AttachBoxTo)
+    robot = DockableRobot('rmax','rmax','base_link','box_dock_link')
+    r = attach(robot, 0)
+  except rospy.ServiceException, e:
+    print "Service call failed: %s"%e
+  print("releasing box done")
+  
+def move_donkey_to(loc = Point(-48., -21., 33.)):
+  moveTo = MoveTo(base_frame='donkey/base_footprint',namespace = '/donkey/')
+  q = Quaternion(0.0,0.,0.,1.)
+  
+  p = Pose(loc,q)
+  moveTo.setTargetPose(p)
+  moveTo.start_motion()
+    
+def attach_box_to_donkey():
+  print("attaching Box to Donkey")
+  rospy.wait_for_service('/box/attach_box_request')
+  try:
+    attach = rospy.ServiceProxy('/box/attach_box_request', AttachBoxTo)
+    robot = DockableRobot('donkey','donkey','base_footprint','box_dock_link')
+    r = attach(robot, 1)
+  except rospy.ServiceException, e:
+    print "Service call failed: %s"%e
+    
+    
+def rover_follow_path():
+  print("Navigation to Point of interest...")
+  points = []
+  points.append(Point(-63.21, -48.07, 34.10))
+  points.append(Point(-66.28, -64.56, 33.04))
+  points.append(Point(-71.85, -75.93, 30.02))
+  points.append(Point(-81.73, -82.87, 25.82))
+  for point in points:
+    moveto = MoveTo(base_frame='donkey/base_footprint',namespace = '/donkey/')
+    q = Quaternion(0.0,0.,0.,1.)    
+    pose = Pose(point,q)
+    moveto.setTargetPose(pose)
+    moveto.start_motion()
+    
+def rover_look_at(loc = Point(-143.15, -140.02, 3.843440055847168)):
+  print("donkey looking at")
+  lookAt = LookAt(base_frame='donkey/base_footprint',namespace = '/donkey/')
+  q = Quaternion(0.0,0.,0.,1.)
+  
+  pose = Pose(loc,q)
+  lookAt.setTargetPose(pose)
+  lookAt.start_motion()
+
+def hawk_area_mapping():
+  print("move to target area")
+    
+if __name__ == '__main__2':
+  rospy.init_node('mission')
+  attach_box_to_rmax()
+  rospy.sleep(1)
+  #attach_quadrotors_to_box()
+  #rospy.sleep(1)
+  rmax_release_box()
+
+if __name__ == '__main__':
+  rospy.init_node('mission')
+  mi_start_up = True
+  move_rmax = True
+  move_donkey = True
+  if mi_start_up:
+    print("MISSION START UP")
+    attach_box_to_rmax()
+    #rospy.sleep(1)
+    #attach_quadrotors_to_box()
+    print("MISSION CONTEXT INTIALIZED")
+    
+    rospy.sleep(1)
+    print("MISSION STARTED TRANSPORTING BOX TO TARGET AREA")
+  if move_rmax:
+    print("MOVING RMAX")
+    move_rmax_to()
+    adjust_rmax_height()
+    rmax_release_box()
+    adjust_rmax_height(height=10)
+  if move_donkey:
+    print("MOVING DONKEY")
+    move_donkey_to()
+    attach_box_to_donkey()
+    rover_follow_path()
+    rover_look_at() 
+  #if move_quadcopter:
+    #attach_box_to_donkey()
+  #rospy.spin()

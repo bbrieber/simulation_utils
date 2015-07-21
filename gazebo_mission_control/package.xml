@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<package>
+  <name>gazebo_mission_control</name>
+  <version>0.0.0</version>
+  <description>The gazebo_mission_control package</description>
+  <maintainer email="bbrieber@cs.uni-bremen.de">Benjamin Brieber</maintainer>
+  <author email="bbrieber@cs.uni-bremen.de">Benjamin Brieber</author>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>gazebo_msgs</build_depend>
+  <build_depend>gazebo_ros</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>tf2</build_depend>
+  <run_depend>gazebo_msgs</run_depend>
+  <run_depend>gazebo_ros</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>tf2</run_depend>
+
+
+  <export>
+    <gazebo_ros plugin_path="${prefix}/lib" gazebo_media_path="${prefix}/.." gazebo_resource_path="${prefix}/..:${prefix}/resource" gazebo_model_path="${prefix}/models"/>
+
+  </export>
+</package>

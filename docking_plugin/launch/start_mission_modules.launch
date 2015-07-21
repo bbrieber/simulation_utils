@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<launch>
+
+  <arg name="spawn_wasps" default="true"/>
+  <arg name="spawn_rover" default="true"/>
+  <arg name="spawn_rmax" default="true"/>
+
+  <group ns="rmax">
+    <node pkg="iai_rescue_robot_control" type="start_nav_module" name="nav_test"/>
+  </group>
+  
+  <group ns="wasp_1">
+    <node pkg="iai_rescue_robot_control" type="start_nav_module" name="nav_test"/>
+  </group>
+  <group ns="donkey" if="$(arg spawn_rover)">
+    <node pkg="iai_rescue_robot_control" type="start_nav_module" name="nav_test"/>
+  </group>
+
+  <group ns="mission">
+    <node pkg="mongodb_log" type="mongodb_log_tf" name="mongodb_log_tf" args="-t /tf -m localhost:27017 -n tflogger -c roslog.tf" />
+    <node pkg="iai_rescue_robot_control" type="hardcoded_mission" name="mission"/>
+  </group>
+  <!--
+  <group ns="box" if="$(arg spawn_box)">
+  </group>
+  -->
+</launch>

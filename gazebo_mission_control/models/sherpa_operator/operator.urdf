@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+
+<robot name="Sherpa Operator" xmlns:xacro="http://ros.org/wiki/xacro">
+  <link name="operator">
+    <!--MAIN_BODY-->
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://iai_rescue_operator_gazebo/models/sherpa_operator/meshes/capsule.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://iai_rescue_operator_gazebo/models/sherpa_operator/meshes/capsule.stl"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="80"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+  </link>
+  
+  
+  <gazebo>
+      <plugin name="operator_controller" filename="libiai_rescue_operator_model_gazebo.so">
+      </plugin>
+  </gazebo>
+</robot>

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<launch>
+  <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+  
+  <arg name="x" default="0"/>
+  <arg name="y" default="0"/>
+  <arg name="z" default="0"/>
+  <arg name="R" default="0"/>
+  <arg name="P" default="0"/>
+  <arg name="Y" default="0"/>
+  <arg name="robot_name" default="Operator"/>
+  <arg name="use_pad" default="true"/>
+    
+  <param name="robot_description" textfile="$(find iai_rescue_operator_gazebo)/models/sherpa_operator/operator.urdf"/>
+  
+  <node name="spawn_operator" pkg="gazebo_ros" type="spawn_model" args="
+    -param robot_description 
+    -urdf 
+    -x $(arg x) 
+    -y $(arg y) 
+    -z $(arg z) 
+    -R $(arg R) 
+    -P $(arg P) 
+    -Y $(arg Y) 
+    -model $(arg robot_name) 
+    -robot_namespace $(arg robot_name)
+  "/>
+  
+  
+   <include file="$(find hector_quadrotor_teleop)/launch/logitech_gamepad.launch" if="$(arg use_pad)"/>  
+  
+</launch>

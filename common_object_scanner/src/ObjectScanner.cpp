@@ -152,8 +152,7 @@ void gazebo::IAI_ObjectScanner::onPong(gazebo::IAI_Scan_Pong& msg)
       p_stamped.pose.orientation.z = pose.rot.z;
       p_stamped.pose.orientation.w = pose.rot.w;
       detection->setValue("SCAN_POSE",p_stamped);
-      detection->setValue("SIGNAL_STRENGTH",msg->strength());
-          
+      detection->setValue("SIGNAL_STRENGTH",msg->strength());          
     }
     detection_pub.publish(detection->serializeToMessage());
     detection->printDesignator();
