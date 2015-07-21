@@ -1,0 +1,5 @@
+string name
+---
+int8 OK=0
+int8 NO_SUCH_CONSUMER=-1
+int8 ret_value

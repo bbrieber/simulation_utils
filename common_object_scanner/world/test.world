@@ -1,0 +1,107 @@
+<?xml version="1.0" ?>
+<sdf version="1.4">
+  <world name="default">
+    <!-- A global light source -->
+    <scene>
+      <sky>
+        <clouds>
+          <speed>12</speed>
+        </clouds>
+      </sky>
+    </scene>
+
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+    <model name="test_consumer">
+      <pose> 1 1 1 0 0 0</pose>
+      <link name="link">
+        <inertial>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.00058</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00058</iyy>
+            <iyz>0</iyz>
+            <izz>0.00019</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>1 1 1</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>1 1 1</size>
+            </box>
+          </geometry>
+        </visual>
+        <sensor type="camera" name="object_detector">
+          <plugin name="object_detector_plugin" 
+              filename="libiai_object_scanner.so">
+            <update_rate>0.5</update_rate>
+            <scanner_id>42</scanner_id>
+            <range>4.2</range>
+            <target_type>victim</target_type>
+          </plugin>          
+        </sensor>
+      </link>
+      <plugin name="consumer" 
+              filename="libiai_battery_consumer.so">
+            <default_consume>0.001</default_consume>
+            <default_consumer_name>DEFAULT_CONSUMER</default_consumer_name>
+      </plugin>
+      
+ 
+    </model>
+
+    
+    
+    <model name="test_scanable">
+      <link name="link">
+        <inertial>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.00058</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00058</iyy>
+            <iyz>0</iyz>
+            <izz>0.00019</izz>
+          </inertia>
+        </inertial>
+        <collision name="collision">
+          <geometry>
+            <sphere>
+              <radius>1</radius>
+            </sphere>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <sphere>
+              <radius>1</radius>
+            </sphere>
+          </geometry>
+        </visual>
+      </link>
+      <plugin name="scanable" 
+              filename="libiai_object_transmitter.so">
+            <object_type>victim</object_type><!-- this is used to determine -->
+            <absolute_detection>false</absolute_detection>
+            <attribute key="otype" value="human"/>
+            <attribute key="color" value="green"/>
+            <attribute key="shape" value="sphere"/>
+      </plugin> 
+    </model>
+  </world>
+  
+</sdf>

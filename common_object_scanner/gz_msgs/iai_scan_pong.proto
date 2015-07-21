@@ -1,0 +1,11 @@
+ package iai_gazebo_msgs.gz_msgs;
+ 
+ message iai_scan_pong2
+ {
+    required double strength = 1;
+    required int32 id = 2;
+    required int32 stamp_id = 3;
+    required string type = 4;
+    required gazebo.msgs.Pose world_pose = 5;
+    repeated Attribute attributes = 6;
+ }

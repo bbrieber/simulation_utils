@@ -1,0 +1,44 @@
+package iai_gazebo_msgs.gz_msgs;
+ 
+ 
+message iai_scan_ping
+{
+  required double x = 1;
+  required double y = 2;
+  required double z = 3;
+  required int32 id = 4;
+  required int32 stamp_id = 5;
+  optional double range = 6 [default=10.];
+  optional string type = 7 [default=""];
+}
+
+ message iai_scan_pong
+ {
+    required double strength = 1;
+    required int32 id = 2;
+    required int32 stamp_id = 3;
+    required string type = 4;
+    optional iai_pose world_pose = 5;
+    repeated iai_attribute attributes = 6;
+ }
+
+ message iai_attribute
+ {
+    required string key = 1;
+    required string value = 2;
+    
+ }
+ 
+ 
+ message iai_pose
+ {
+    required double lx = 1;
+    required double ly = 2;
+    required double lz = 3;
+    required double rx = 4;
+    required double ry = 5;
+    required double rz = 6;
+    required double rw = 7;
+    
+ } 
+ 
